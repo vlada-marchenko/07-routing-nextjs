@@ -6,8 +6,7 @@ type Props = {
   params: { id: string };
 };
 
-export default async function NoteModalPage(props: Props | Promise<Props>) {
-  const { params } = await props;
+export default async function NoteModalPage({ params }: Props) {
   const note = await fetchNoteById(Number(params.id));
 
   return (
