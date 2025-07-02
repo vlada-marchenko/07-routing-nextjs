@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import css from './Header.module.css'
+import dynamic from 'next/dynamic'
+
+const TagsMenu = dynamic(() => import('../TagsMenu/TagsMenu'))
 
 const Header = () => {
   return (
@@ -13,7 +16,7 @@ const Header = () => {
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/notes">Notes</Link>
+          <TagsMenu />
           </li>
         </ul>
       </nav>

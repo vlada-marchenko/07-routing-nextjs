@@ -1,4 +1,4 @@
-import css from './page.module.css'
+import css from '../app/page.module.css'
 
 export default function Home() {
   return <main>

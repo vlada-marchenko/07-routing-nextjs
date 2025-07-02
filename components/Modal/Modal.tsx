@@ -1,25 +1,28 @@
 'use client'
 
 import { useEffect } from 'react'
-import NoteForm from '../NoteForm/NoteForm'
-import css from './NoteModal.module.css'
+import css from './Modal.module.css'
 import { createPortal } from 'react-dom'
+import { useRouter } from 'next/navigation'
 
-export interface NoteModalProps {
-  onClose: () => void
+
+export interface ModalProps {
+  children: React.ReactNode
 }
 
-export default function NoteModal({ onClose }: NoteModalProps) {
+export default function Modal({ children }: ModalProps) {
+const router = useRouter()
+
  const handleBackDropClick = (event: React.MouseEvent<HTMLDivElement>) => {
   if (event.target === event.currentTarget) {
-    onClose()
+    router.back()
   }
  }
 
  useEffect(() => {
   const handleEscKey = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      onClose()
+      router.back()
     }
   }
 
@@ -31,7 +34,7 @@ export default function NoteModal({ onClose }: NoteModalProps) {
     document.removeEventListener('keydown', handleEscKey)
     document.body.style.overflow = originalOverflow
   }
- }, [onClose])
+ }, [router])
 
   return createPortal(<div
   className={css.backdrop}
@@ -40,7 +43,7 @@ export default function NoteModal({ onClose }: NoteModalProps) {
   aria-modal="true"
 >
   <div className={css.modal}>
-    <NoteForm onCancel={onClose}/>
+    {children}
   </div>
 </div>, document.body)
 }
