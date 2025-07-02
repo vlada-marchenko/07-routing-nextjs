@@ -2,12 +2,14 @@ import Modal from '../../../../../components/Modal/Modal';
 import NotePreview from '../../../../../components/NotePreview/NotePreview';
 import { fetchNoteById } from '../../../../../lib/api';
 
+type Params = Promise<{ id: string }>;
+
 export default async function NoteModalPage({
   params,
 }: {
-  params: Promise<{ id: string }>;  
+  params: Params;
 }) {
-  const { id } = await params;     
+  const { id } = await params;          // ← await the Promise
   const note = await fetchNoteById(Number(id));
 
   return (
