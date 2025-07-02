@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-query';
 import NoteDetailsClient from './NoteDetails.client';
 
-export interface PageParams {
-  id: string;
-}
+type NotePageProps = {
+  params: { id: string };
+};
 
 export default async function NotePage(
-  props: { params: PageParams } | Promise<{ params: PageParams }>
+  props: NotePageProps | Promise<NotePageProps>
 ) {
   const { params } = await props;
   const noteId = Number(params.id);
