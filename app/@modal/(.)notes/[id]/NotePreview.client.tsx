@@ -15,18 +15,27 @@ export default function NotePreview({ noteId }: { noteId: number }) {
   } = useQuery<Note, Error>({
     queryKey: ['note', noteId],
     queryFn: () => fetchNoteById(noteId),
+    refetchOnMount: false,     
   })
 
   const router = useRouter()
   const handleClose = () => router.back()
 
 
-  if (isLoading) return null           
+  if (isLoading) return null
   if (isError || !note) return <p>Помилка завантаження нотатки</p>
 
   return (
     <Modal onClose={handleClose}>
       <div className={css.container}>
+        <button
+          className={css.backBtn}
+          onClick={handleClose}
+          aria-label="Закрити модальне вікно"
+        >
+          ×
+        </button>
+
         <header className={css.header}>
           <h2>{note.title}</h2>
           <span className={css.tag}>{note.tag}</span>
@@ -43,4 +52,3 @@ export default function NotePreview({ noteId }: { noteId: number }) {
     </Modal>
   )
 }
-
