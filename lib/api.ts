@@ -2,7 +2,7 @@ import type { Note } from '../types/note'
 import axios from 'axios'
 
 export interface FetchParams {
-    search: string,
+    search?: string,
     tag?: string,
     page: number,
     perPage?: number,
@@ -38,15 +38,6 @@ export async function fetchNotes({search = '', page = 1, tag = '', perPage = 12}
     return data
 }
 
-export async function fetchNoteByTags({ tag }: FetchParams): Promise <Note[]> {
-    const fetchedTag = await axios.get<Note[]>(`${BASE_URL}/${tag}`, {
-            headers: {
-           accept: 'application/json',
-           Authorization: `Bearer ${token}`
-      }
-    })
-    return fetchedTag.data
-}
 
 export async function fetchNoteById(id:number): Promise <Note> {
     const fetchedNote = await axios.get<Note>(`${BASE_URL}/${id}`,{

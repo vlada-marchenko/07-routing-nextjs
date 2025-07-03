@@ -17,10 +17,11 @@ type Props = {
   initialNotes: Note[],
   initialPage: number,
   initialSearch: string
+  initialTotalPages: number
   tag: string
 }
 
-const NotesClient = ({ initialNotes, initialPage, initialSearch, tag }: Props) => {
+const NotesClient = ({ initialNotes, initialPage, initialSearch, initialTotalPages, tag }: Props) => {
   const [page, setPage] = useState(initialPage)
   const [search, setSearch] = useState(initialSearch || '')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -33,8 +34,9 @@ const NotesClient = ({ initialNotes, initialPage, initialSearch, tag }: Props) =
   const { data, isLoading, error } = useQuery<HttpResponse, Error>({
 	queryKey: ['notes', page, debouncedSearch, tag] ,
   queryFn: () => fetchNotes({ search: debouncedSearch, page, perPage, tag }),
-  initialData: { notes: initialNotes, totalPages: 1 },
-  refetchOnWindowFocus: false
+  initialData: { notes: initialNotes, totalPages: initialTotalPages },
+  refetchOnWindowFocus: false,
+  placeholderData: (prev) => prev
   });
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const NotesClient = ({ initialNotes, initialPage, initialSearch, tag }: Props) =
     <SearchBox search={search} onSearchChange={setSearch} />
 		{data && data.totalPages > 1 && <Pagination page={page} totalPages={data.totalPages || 1} onPageChange={setPage}/>}
 		<button className={css.button} onClick={handleModalOpen}>Create note +</button>
-		{isModalOpen && <Modal> <NoteForm onCancel={handleModalClose}/></Modal>}
+		{isModalOpen && <Modal onClose={handleModalClose}> <NoteForm onCancel={handleModalClose}/></Modal>}
   </header>
   {!isLoading && notes.length > 0 && <NoteList notes={notes}/>}
 </div>

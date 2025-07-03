@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import css from './SidebarNotes.module.css'
-import { fetchNotes } from '../../../../lib/api'
+
+const all_tags = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping']
 
 const SidebarNotes = async () => {
-  const { notes } = await fetchNotes({ search: '', page: 1 })
-  const tags = [...new Set(notes.map(note => note.tag))].sort()
 
   return (
     <ul className={css.menuList}>
@@ -13,7 +12,7 @@ const SidebarNotes = async () => {
           All notes
         </Link>
       </li>
-      {tags.map(tag => (
+      {all_tags.map(tag => (
         <li key={tag} className={css.menuItem}>
           <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
             {tag}

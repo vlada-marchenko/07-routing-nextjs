@@ -1,19 +1,32 @@
-'use client';
+'use client'
 
-import css from './NotePreview.module.css';
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import Modal from '../../../../components/Modal/Modal'
+import { fetchNoteById } from '../../../../lib/api'
+import css from './NotePreview.module.css'
+import type { Note } from '../../../../types/note'
 
-export interface Note {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-  createdAt?: string;   
-}
+export default function NotePreview({ noteId }: { noteId: number }) {
+  const {
+    data: note,
+    isLoading,
+    isError,
+  } = useQuery<Note, Error>({
+    queryKey: ['note', noteId],
+    queryFn: () => fetchNoteById(noteId),
+  })
 
-export default function NotePreview({ note }: { note: Note }) {
+  const router = useRouter()
+  const handleClose = () => router.back()
+
+
+  if (isLoading) return null           
+  if (isError || !note) return <p>Помилка завантаження нотатки</p>
+
   return (
-    <div className={css.container}>
-      <div className={css.item}>
+    <Modal onClose={handleClose}>
+      <div className={css.container}>
         <header className={css.header}>
           <h2>{note.title}</h2>
           <span className={css.tag}>{note.tag}</span>
@@ -22,14 +35,12 @@ export default function NotePreview({ note }: { note: Note }) {
         <p className={css.content}>{note.content}</p>
 
         {note.createdAt && (
-          <time
-            dateTime={note.createdAt}
-            className={css.date}
-          >
+          <time dateTime={note.createdAt} className={css.date}>
             {new Date(note.createdAt).toLocaleDateString()}
           </time>
         )}
       </div>
-    </div>
-  );
+    </Modal>
+  )
 }
+

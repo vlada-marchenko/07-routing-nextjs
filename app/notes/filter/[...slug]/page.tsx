@@ -21,6 +21,7 @@ export default async function NotesPage({
     search: initialSearch,
     page: initialPage,
     perPage: 10,
+    tag
   });
 
   return (
@@ -29,6 +30,7 @@ export default async function NotesPage({
         initialNotes={response.notes}
         initialPage={initialPage}
         initialSearch={initialSearch}
+        initialTotalPages={response.totalPages}
         tag={tag}
       />
     </div>
